@@ -1,0 +1,24 @@
+use Mix.Config
+
+config :travis_webhook,
+  port: 1234,
+  repo_path: "../REPO_NAME",
+  repo_slug: "GITHUB_ACCOUNT_OR_ORG/REPO_NAME",
+  branch: "master",
+  token: "YOUR TRAVIS TOKEN HERE"
+  update_func: fn json, cmd_opts ->
+    deps_to_update = [
+      "dep01",
+      "dep02",
+    ]
+
+    {_, 0} = System.cmd "mix", ["deps.update" | deps_to_update], cmd_opts
+    {_, 0} = System.cmd "mix", ["compile"], cmd_opts
+
+    screen_name = "my_app"
+    # kill old app
+    {_, 0} = System.cmd "screen", ["-S", screen_name, "-X", "stuff", "\\003"]
+    {_, 0} = System.cmd "screen", ["-S", screen_name, "-X", "stuff", "\\003"]
+    # start new app
+    {_, 0} = System.cmd "screen", ["-S", screen_name, "-X", "stuff", "iex -S mix\n"]
+  end
