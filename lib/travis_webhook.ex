@@ -77,7 +77,7 @@ defmodule TravisWebhook do
           |> Enum.drop(1) # POST ...
           |> Enum.map(fn line ->
               [key, val] = String.split(line, ":", parts: 2)
-              {String.Casing.downcase(key), String.strip(val)}
+              {String.downcase(key), String.strip(val)}
             end)
           |> Map.new
 
